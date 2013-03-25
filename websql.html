@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>test</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href= "./bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+
+		<script src="./js/jquery.js"></script>
+		<script src="./bootstrap/js/bootstrap.min.js"></script>
+
+		<title>Web SQL Database Example</title>
+		<script>
+			console.log();
+			//Open or create the database
+			var db = openDatabase('contacts', '1.0', 'my contacts app', 2 * 1024 * 1024);
+
+			//Initialize the database
+			db.transaction(function(tx) {
+				tx.executeSql('CREATE TABLE IF NOT EXISTS contacts(id integer primary key autoincrement, firstname, lastname, phonenumber)');
+			});
+			function addContact() {
+				var inputFirstName = $("#firstname").val();
+				var inputLastName = $("#lastname").val();
+				var inputPhoneNumber = $("#phonenumber").val();
+
+				db.transaction(function(tx) {
+					tx.executeSql('INSERT INTO contacts(firstname,lastname,phonenumber) VALUES (?,?,?)', [inputFirstName, inputLastName, inputPhoneNumber], function(tx, results) {
+						var contactRow = $("<tr>").appendTo("#contacts tbody");
+						$('<td />').appendTo(contactRow).text(results.insertId);
+						$('<td />').appendTo(contactRow).text(inputFirstName);
+						$('<td />').appendTo(contactRow).text(inputLastName);
+						$('<td />').appendTo(contactRow).text(inputPhoneNumber);
+						$('<td />').appendTo(contactRow).html('<td><button  id ="b1" onclick="remove(' + results.insertId + ')">Delete</button><td />');
+					});
+				});
+			}
+
+
+
+function remove(id) {
+				console.log(i);
+				console.log('enter in to the function');
+				db.transaction(function(tx) {
+					tx.executeSql('DELETE FROM contacts WHERE id=?', [id], function() {
+						$("#b1").click(function(){ $(this).closest('tr').remove();
+});
+					
+						
+					});
+				});
+			}	
+
+			function removeContact(id,i) {
+				console.log(i);
+				console.log('enter in to the function');
+				db.transaction(function(tx) {
+					tx.executeSql('DELETE FROM contacts WHERE id=?', [id], function() {
+						$("#b1").click(function(){     $(this).closest('tr').remove();
+});
+						$("#demo"+i).hide();
+						
+					});
+				});
+			}	
+
+			function listContacts() {
+				console.log("HERE");
+				db.transaction(function(tx) {
+					tx.executeSql('SELECT * FROM contacts', [], function(tx, results) {
+						console.log(results.rows);
+						var len = results.rows.length;
+						var i;
+							for ( i = 0; i < len; i++) {
+							var html = "<tr id = "+'demo'+i+"><td>" + results.rows.item(i).id + "</td><td>"+ results.rows.item(i).firstname+"</td><td>"+ results.rows.item(i).lastname+"</td><td >"+ results.rows.item(i).phonenumber +" </td>";
+							html = html + "<td><button onclick="+'removeContact('+results.rows.item(i).id+','+i+')'+">Delete</button></td></tr>";
+							$("#contacts").append(html);
+							/*console.log('enter here'+len);
+							console.log(results.rows.item(i));
+$("#contacts").append("<tr><td>" + i + "</td><td>" + results.rows.item(i).firstname + "</td><td>" + results.rows.item(i).lastname +"</td><td >"+ results.rows.item(i).phonenumber +" </td></tr>");
+		var txt=$("<td></td>").append('<button onclick="removeContact(' + results.rows.item(i)+')">Delete </button> ') ;
+		$("tr").append(txt);*/
+				
+					}
+
+					});
+				});
+			}
+
+			$(function() {
+				$("#hello").click(listContacts);
+				
+			});
+			//window.addEventListener("load", listContacts, true);
+		</script>
+	</head>
+	<body>
+		<div id="container">
+			<section id="input"> 
+								<h1>Add Contacts</h1>
+				<label>Firstname:
+					<input type="text" name="firstname" id="firstname" />
+				</label>
+				<label>Lastname:
+					<input type="text" name="lastname" id="lastname" />
+				</label>
+				<label>Phone number:
+					<input type="tel" name="phonenumber" id="phonenumber" />
+				</label>
+
+				<button onclick="addContact()">	Add</button>
+				<button class="btn" id="hello">show</button>
+
+			</section>
+			<section id="output">
+				<h1>View Contacts</h1>
+				<table id="contacts"  class = " table table-hover " border="1" cellspacing="0" style="width:100%">
+					<th>Id</th>
+					<th>Firstname</th>
+					<th>Lastname</th>
+					<th id ="c1">Phonenumber</th>
+				</table>
+			</section>
+		</div>
+	</body>
+</html>

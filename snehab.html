@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+	<title>test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href= "./bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+	
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="./bootstrap/js/bootstrap.min.js"></script>
+	</head>
+<body>
+
+ 
+
+    <div align="center">
+     <input type="hidden" id="id"/>
+     First name:<input type="text" id="firstName"/><br/>
+     Last name:<input type="text" id="lastName"/><br/>
+     Phone: <input type="text" id="phone"/><br/>
+    <input type="button" id ="reset" class = "primary-btn", value ="reset">
+     <input type = "button"  id= "update" class ="btn" value ="update">
+     <input type = "button"  id= "insert" class ="btn" value ="insert">
+     <input type = "button"  id= "drop" class ="btn" value ="drop table">
+     <input type = "button" id ="delete" class ="btn" value =" delete">
+       
+    <div id= "results"> ...</div>
+
+    </div>
+  </body>
+  
+    <script> 
+ var results = $("#results"); 
+ var id = $("#id");
+ var firstName = $("#firstName");  
+ var lastName = $("#lastName");  
+ var phone = $("#phone");
+   
+ var createStatement = "CREATE TABLE IF NOT EXISTS Contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, phone TEXT)";
+ var selectAllStatement = "SELECT * FROM Contacts";
+ var insertStatement = "INSERT INTO Contacts (firstName, lastName, phone) VALUES (?, ?, ?)";
+ var updateStatement = "UPDATE Contacts SET firstName = ?, lastName = ?, phone = ? WHERE id = ?";
+ var deleteStatement = "DELETE FROM Contacts WHERE id=?";
+ var dropStatement = "DROP TABLE Contacts";
+
+ var db = openDatabase("AddressBook", "1.0", "Address Book", 200000);
+ var dataset;
+ createTable();
+
+      function onError(tx, error) {
+        alert(error.message);
+      }
+     
+      function showRecords() {
+        
+        db.transaction(function(tx) {
+          tx.executeSql(selectAllStatement, [], function(tx, result) {
+dataset = result.rows;
+            for (var i = 0, item = null; i < dataset.length; i++) {
+              item = dataset.item(i);
+              '<li>' + item['lastName'] + ' , ' + item['firstName'] + ' <a id="myanchorid" href="#">edit</a>  ';
+}
+          });
+        });
+      }
+      
+           
+            $("insert)").click(insertRecord());
+            $("#delete").click(deleteRecord());     
+            $("#update").click(updateRecord());
+            $("#drop").click(dropTable());
+      function createTable() { 
+        db.transaction(function(tx) {
+          tx.executeSql(createStatement, [], showRecords, onError);
+        });
+      }
+      
+      function insertRecord() {
+        db.transaction(function(tx) {
+          tx.executeSql(insertStatement, [firstName.value, lastName.value, phone.value], loadAndReset, onError);
+        });
+      }
+      
+      
+ 
+
+      function updateRecord() {
+        db.transaction(function(tx) {
+          tx.executeSql(updateStatement, [firstName.value, lastName.value, phone.value, id.value], loadAndReset, onError);
+        }); 
+      }
+      
+      function deleteRecord(id) {
+        db.transaction(function(tx) {
+          tx.executeSql(deleteStatement, [id], showRecords, onError);
+        });
+resetForm();
+      }
+       
+      function dropTable() {
+        db.transaction(function(tx) {
+          tx.executeSql(dropStatement, [], showRecords, onError);
+        });
+resetForm();
+      }
+
+ function loadAndReset(){
+ resetForm();
+ showRecords();
+ }
+
+ function resetForm(){
+firstName.value = '';
+lastName.value = '';
+phone.value = '';
+id.value = ''; 
+ }
+    </script>
+</html>​
+
+
+
+ 
+  
+
+
+
+
+
+	

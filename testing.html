@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+	<title>test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href= "./bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+	
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="./bootstrap/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<h1>welcome</h1>
+		<script>
+		var lib = openDatabase('library', '1.0', 'my first database', 2 * 1024 * 1024);
+
+// Check if the database was just created. Useful for initial database setup
+if( lib.isNew() ) {
+
+	// create the "books" table
+	lib.createTable("books", ["code", "title", "author", "year", "copies"]);
+	
+	// insert some data
+	lib.insert("books", {code: "B001", title: "Phantoms in the brain", author: "Ramachandran", year: 1999, copies: 10});
+	lib.insert("books", {code: "B002", title: "The tell-tale brain", author: "Ramachandran", year: 2011, copies: 10});
+	lib.insert("books", {code: "B003", title: "Freakonomics", author: "Levitt and Dubner", year: 2005, copies: 10});
+	lib.insert("books", {code: "B004", title: "Predictably irrational", author: "Ariely", year: 2008, copies: 10});
+	lib.insert("books", {code: "B005", title: "Tesla: Man out of time", author: "Cheney", year: 2001, copies: 10});
+	lib.insert("books", {code: "B006", title: "Salmon fishing in the Yemen", author: "Torday", year: 2007, copies: 10});
+	lib.insert("books", {code: "B007", title: "The user illusion", author: "Norretranders", year: 1999, copies: 10});
+	lib.insert("books", {code: "B008", title: "Hubble: Window of the universe", author: "Sparrow", year: 2010, copies: 10});
+	
+	// commit the database to localStorage
+	// all create/drop/insert/update/delete operations should be committed
+	lib.commit();
+}
+
+// simple select queries
+lib.query("books", {year: 2011});
+lib.query("books", {year: 1999, author: "Norretranders"});
+
+// select all books
+lib.query("books");
+
+// select all books published after 2003
+lib.query("books", function(row) {	// the callback function is applied to every row in the table
+	if(row.year > 2003) {		// if it returns true, the row is selected
+		return true;
+	} else {
+		return false;
+	}
+});
+
+// select all books by Torday and Sparrow
+lib.query("books", function(row) {
+	if(row.author == "Torday" || row.author == "Sparrow") {
+		return true;
+	} else {
+		return false;
+	}
+});
+
+
+// query results are returned as arrays of object literals
+// an ID field with the internal auto-incremented id of the row is also included
+// thus, ID is a reserved field name
+
+lib.query("books", {author: "ramachandran"});
+
+/* results
+[
+ {
+   ID: 1,
+   code: "B001",
+   title: "Phantoms in the brain",
+   author: "Ramachandran",
+   year: 1999,
+   copies: 10
+ },
+ {
+   ID: 2,
+   code: "B002",
+   title: "The tell-tale brain",
+   author: "Ramachandran",
+   year: 2011,
+   copies: 10
+ }
+]
+*/
+
+
+// change the title of books published in 1999 to "Unknown"
+lib.update("books", {year: 1999}, function(row) {
+	row.title = "Unknown";
+	
+	// the update callback function returns to the modified record
+	return row;
+});
+
+// add +5 copies to all books published after 2003
+lib.update("books",
+	function(row) {	// select condition callback
+		if(row.year > 2003) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	function(row) { // update function
+		row.year+=5;
+		return row;
+	}
+);
+
+
+// if there's a book with code B003, update it, or insert it as a new row
+lib.insertOrUpdate("books", {code: 'B003'}, {	code: "B003",
+						title: "Freakonomics",
+						author: "Levitt and Dubner",
+						year: 2005,
+						copies: 15});
+
+
+// delete all books published in 1999
+lib.deleteRows("books", {year: 1999});
+
+// delete all books published before 2005
+lib.deleteRows("books", function(row) {
+	if(row.year < 2005) {
+		return true;
+	} else {
+		return false;
+	}
+});
+
+lib.commit(); // commit the deletions to localStorage
+</script>
+</body>
+</html>
