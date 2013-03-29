@@ -13,9 +13,9 @@
             var insertStatement = "INSERT INTO data (email, password,op1,op2,address,remember) VALUES (?,?,?,?,?,?)";
             var updateStatement = "UPDATE data SET email = ?, password = ?, op1=?, op2=?, address=?, remember=? WHERE id=?";
             var deleteStatement = "DELETE FROM data WHERE id=?";
-            // var dropStatement = "DROP TABLE data";
+             var dropStatement = "DROP TABLE data";
             var dataset;
-               var db = openDatabase('data', '1.0', 'sign up users', 2 * 1024 * 1024);
+              var db = openDatabase('data', '1.0', 'sign up users', 2 * 1024 * 1024);
             function initDatabase() {
             console.debug('called initDatabase()');
 
