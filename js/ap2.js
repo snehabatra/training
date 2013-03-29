@@ -1,3 +1,7 @@
+/**
+ * @author Rohit Jindal
+ */
+
 			var db = openDatabase('data', '1.0', 'sign up users', 2 * 1024 * 1024);
 
 			var createStatement = "CREATE TABLE IF NOT EXISTS data(id integer primary key autoincrement, email, password,op1,op2,address,remember)";
@@ -56,8 +60,7 @@ function createTable() {
       }
       
 			 
-			function insertRecord(){ 
-			 
+			function insertRecord(){ 		 
 						var email1 =$("#email").val();
 			var password1 = $("#password").val();
 			var op1 =$("#op1").val();
