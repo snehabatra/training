@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-	<head>
+<head>
 <tithle>test</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
@@ -29,11 +29,11 @@
     <input type="text" class="span2 search-query">
   </div>
 </form>
-					</div>
-		<div class="span3">
-			Level 2 column
-			<h2> hi how are you</h2>
-			<input class="span1" type="text" placeholder=".span1">
+</div>
+<div class="span3">
+Level 2 column
+<h2> hi how are you</h2>
+<input class="span1" type="text" placeholder=".span1">
 <input class="span2" type="text" placeholder=".span2">
 <input class="span3" type="text" placeholder=".span3">
 <span class="input-xlarge uneditable-input">Some value here</span>

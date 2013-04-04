@@ -25,7 +25,7 @@ function greet(){
 <body>
 <form name="local_storage_form" method="post" action="">
  
-<input type="text" name="your_name" id="your_name" value="" />
+<input type="text" name="" id="your_name" value="" />
 <input type="text" name="your_surname" id="your_surname" value="" />
  
 <input type="submit" value="Submit" />

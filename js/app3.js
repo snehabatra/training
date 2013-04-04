@@ -1,9 +1,9 @@
 console.log("reached");
 var dataset;
 var DataType;
-var createStatement = "CREATE TABLE IF NOT EXISTS sneha(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT, sex TEXT , address TEXT, remember TEXT )";
-var insertStatement = 'INSERT INTO sneha(email, password,sex,address,remember) VALUES (?,?,?,?,?)';
-var updateStatement = 'UPDATE sneha SET email = ?, password = ?, sex=?, address=?, remember=? WHERE id=?';
+var createStatement = 'CREATE TABLE IF NOT EXISTS sneha(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT, gender TEXT,address TEXT, remember TEXT )';
+var insertStatement = 'INSERT INTO sneha(email, password,gender,address,remember) VALUES (?,?,?,?,?)';
+var updateStatement = 'UPDATE sneha SET email = ?, password = ?, gender=?,address=?, remember=? WHERE id=?';
 var deleteStatement = 'DELETE FROM sneha WHERE id=?';
 var dropStatement = 'DROP TABLE sneha';
 var selectAllStatement = 'SELECT * FROM sneha';
@@ -52,12 +52,12 @@ function createTable() {
 function insertRecord() {
     var email = $('#email').val();
     var password = $('#password').val();
-    var sex= $('#op1').val();
-    var sex = $('#op2').val();
+    var gender = $('#op1').val();
+    var gender = $('#op2').val();
     var address = $('#address').val();
     var remember = $('#remember').val();
     db.transaction(function(tx) {
-        tx.executeSql(insertStatement, [email, password, sex, address, remember], loadAndReset, handleErrors);
+        tx.executeSql(insertStatement, [email, password, gender, address, remember], loadAndReset, handleErrors);
     });
 }
 
@@ -73,17 +73,16 @@ function deleteRecord(id) {
 
 function updateRecord() {
     console.debug('called updateRecord()');
-    var id = $('#id').val();
+    
     var email = $('#email').val();
     var password = $('#password').val();
-    var sex = $('#op1').val();
-    var sex = $('#op2').val();
+    var gender = $('#op1').val();
+    var gender = $('#op2').val();
     var address = $('#address').val();
     var remember = $('#remember').val();
-    /*var id = $("#id").val();*/
-
+    var id = $('#id').val();
     db.transaction(function(tx) {
-        tx.executeSql(updateStatement, [email, password, sex, address, remember, id], loadAndReset, handleErrors);
+        tx.executeSql(updateStatement, [email, password, gender, address, remember, id], loadAndReset, handleErrors);
         console.debug('executeSql: ' + updateStatement);
     });
 }
@@ -99,15 +98,14 @@ function dropTable() {
 
 }
 
-function loadRecord(i)
- {
-    console.log(i);
+function loadRecord(i) {
+    console.debug('called loadRecord()');
     var item = dataset.item(i);
 
     $('#email').val(item['email']);
     $('#password').val(item['password']);
-    $('#op1').val(item['sex']);
-    $('#op2').val(item['sex']);
+    $('#op1').val(item['gender']);
+    $('#op2').val(item['gender']);
     $('#address').val(item['address']);
     $('#remember').val(item['remember']);
     $('#id').val(item['id']);
@@ -160,7 +158,7 @@ function renderRecords(transaction, results) {
         html = html + '      <th class="span1">Id</td>';
         html = html + '      <th>email</td>';
         html = html + '      <th>Password</td>';
-        html = html + '      <th>sex</td>';
+        html = html + '      <th>gender</td>';
         html = html + '      <th>address</td>';
         html = html + '      <th>remember me</td>';
         html = html + '      <th class="span1">Actions</td>';
@@ -176,7 +174,8 @@ function renderRecords(transaction, results) {
             html = html + '      <td>' + item['id'] + '</td>';
             html = html + '      <td>' + item['email'] + '</td>';
             html = html + '      <td>' + item['password'] + '</td>';
-            html = html + '      <td>' + item['sex'] + '</td>';
+            html = html + '      <td>' + item['gender'] + '</td>';
+ 
             html = html + '      <td>' + item['address'] + '</td>';
             html = html + '      <td>' + item['remember'] + '</td>';
             html = html + '      <td>';
