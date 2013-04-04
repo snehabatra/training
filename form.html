@@ -1,6 +1,7 @@
 <!DOCTYPE  HTML>
 <html>
     <head>
+<<<<<<< HEAD
         CRUD
     </head>
     <title>test</title>
@@ -165,6 +166,158 @@
         $(document).ready(function ()
         {
         createTable();
+=======
+        <title>test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href= "./bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+
+        <script src="./js/jquery.js"></script>
+        <script src="./bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript"  language="JavaScript">
+                        var selectAllStatement = "SELECT * FROM data";
+            var insertStatement = "INSERT INTO data (email, password,op1,op2,address,remember) VALUES (?,?,?,?,?,?)";
+            var updateStatement = "UPDATE data SET email = ?, password = ?, op1=?, op2=?, address=?, remember=? WHERE id=?";
+            var deleteStatement = "DELETE FROM data WHERE id=?";
+             var dropStatement = "DROP TABLE data";
+            var dataset;
+              var db = openDatabase('data', '1.0', 'sign up users', 2 * 1024 * 1024);
+            function initDatabase() {
+            console.debug('called initDatabase()');
+
+            try {
+            if (!window.openDatabase) {
+            alert('not supported');
+            } else {
+            
+
+            createTable();
+            }
+            } catch(e) {
+            if (e == 2) {
+            alert('Invalid database version');
+            } else {
+            alert('Unknown error ' + e);
+            }
+            return;
+            }
+            }
+
+            function createTable() {
+            console.debug('called createTable()');
+
+            var sql = "CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT,password TEXT,op1 TEXT , op2 TEXT , remember TEXT)";
+            db.transaction(function (tx){
+            tx.executeSql(sql, [], resetForm(), onError);
+            console.debug('executeSql: ' + sql);
+            }
+            );
+            }
+
+            function onError(tx, error)
+            {
+            console.log(error);
+
+            }
+
+            function showRecords()
+            {
+            $("#res").html('')
+
+            db.transaction(function(tx) {
+
+            tx.executeSql(selectAllStatement, [], function(tx, result) {
+
+            dataset = result.rows;
+
+            for (var i =0, item = null; i < dataset.length; i++) {
+
+            item = dataset.item(i);
+            var linkeditdelete = '<li>' + item['username'] + ' , ' + item['useremail'] + '    ' + '<a href="#" onclick="loadRecord(' + i + ');">edit</a>' + '    ' +
+
+            '<a href="#" onclick="deleteRecord(' + item['id'] + ');">delete</a></li>';
+
+            $("#res").append(linkeditdelete);
+            }
+            });
+            });
+            }
+
+            function insertRecord()
+            {
+            var email1 = $("#email").val();
+            var password1 = $("#password").val();
+            var op11 = $("#op1").val();
+            var op22 = $("#op2").val();
+            var address1 = $("#address").val();
+            var remember1 = $("#remember").val();
+            db.transaction(function(tx) {
+            tx.executeSql(insertStatement, [email1, password1, op11, op22, address1, remember1], loadAndReset(), onError());
+            });
+            return false;
+            }
+
+            function loadRecord(i)
+            {
+            var item = dataset.item(i);
+            $("#email").val((item['email']));
+            $("#password").val((item['password']));
+            $("#op1").val((item['op1']));
+            $("#op2").val((item['op2']));
+            $("#address").val((item['address']));
+            $("#remember").val((item['remember']));
+            $("#id").val((item['id']));
+            }
+            function updateRecord() {
+            var uemail = $("#email").val();
+            var upassword = $("#password").val();
+            var uop1 = $("#op1").val();
+            var uop2 =$("#op2").val();
+            var uaddress = $("#address").val();
+            var uremember = $("#remember").val();
+            var useridupdate = $("#id").val();
+
+            db.transaction(function (tx) {
+            tx.executeSql(updateStatement, [uemail, upassword, uop1,uop2,uaddress,uremember,Number(useridupdate)], loadAndReset(), onError());
+            });
+            }
+            function deleteRecord(id) {
+            console.log(id);
+            db.transaction(function(tx) {
+            tx.executeSql(deleteStatement, [id], showRecords(), onError());
+            alert("Delete Sucessfully");
+            }); 
+            resetForm();
+            }
+
+            function dropTable(){
+            db.transaction(function(tx){
+            tx.executeSql(dropStatement, [], showRecords(), onError()); });
+            resetForm();
+            }
+
+            function loadAndReset() {
+            alert("in load and reset");
+            resetForm();
+             showRecords();
+            }
+
+            function resetForm() {
+            $("#email").val("");
+            $("#password").val("");
+            $("#op1").val("");
+            $("#op2").val("");
+            $("#address").val("");
+            $("#remember").val("");
+            $("#id").val("");
+            }
+              
+
+              
+            $(document).ready(function ()
+            {
+            initDatabase();
+>>>>>>> 9dc131a97a2e09ecd2a11710feaaffec5e58fd0c
                 $("#submitBut").click(insertRecord);
 
         $("#btnUp").click(updateRecord);
