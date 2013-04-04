@@ -144,6 +144,7 @@ function showRecordsAndResetForm() {
 function handleErrors(transaction, error) {
     console.debug('called handleErrors()');
     console.error('error ' + error.message);
+
     alert(error.message);
     return true;
 }
@@ -205,18 +206,12 @@ function renderRecords(transaction, results) {
     }
 }
 
-/*
-function updateCacheContent(event) {
-    console.debug('called updateCacheContent()');
-    window.applicationCache.swapCache();*/
-
-
 
 $(document).ready(function () {
-    /*.applicationCache.addEventListener('updateready', updateCacheContent, false);*/
-
+   
     initDatabase();
 });
+
 </script>
 <body>
   <h1>CRUD off-line<h1>
@@ -245,8 +240,6 @@ $(document).ready(function () {
       <button type="button" class="btn btn-danger" onClick="dropTable()">Drop table</button>
     </div>
   </form>
-
   <div id="results"></div>
-
 </body>
 </html>
