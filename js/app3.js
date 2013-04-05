@@ -1,9 +1,9 @@
 console.log("reached");
 var dataset;
 var DataType;
-var createStatement = 'CREATE TABLE IF NOT EXISTS sneha(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT, gender TEXT,address TEXT, remember TEXT )';
+var createStatement = 'CREATE TABLE IF NOT EXISTS sneha(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT, gender TEXT, address TEXT, remember TEXT )';
 var insertStatement = 'INSERT INTO sneha(email, password,gender,address,remember) VALUES (?,?,?,?,?)';
-var updateStatement = 'UPDATE sneha SET email = ?, password = ?, gender=?,address=?, remember=? WHERE id=?';
+var updateStatement = 'UPDATE sneha SET email = ?, password = ?,gender=?, address = ?, remember = ? WHERE id=?';
 var deleteStatement = 'DELETE FROM sneha WHERE id=?';
 var dropStatement = 'DROP TABLE sneha';
 var selectAllStatement = 'SELECT * FROM sneha';
@@ -52,10 +52,11 @@ function createTable() {
 function insertRecord() {
     var email = $('#email').val();
     var password = $('#password').val();
-    var gender = $('#op1').val();
-    var gender = $('#op2').val();
-    var address = $('#address').val();
-    var remember = $('#remember').val();
+    var gender = $('input:radio[name=gender]:checked').val();
+    console.log(gender);    
+     var address = $('#address').val();
+    /*var remember = $('#remember').val();*/
+    var remember =$('#remember').is(':checked');
     db.transaction(function(tx) {
         tx.executeSql(insertStatement, [email, password, gender, address, remember], loadAndReset, handleErrors);
     });
@@ -76,11 +77,14 @@ function updateRecord() {
     
     var email = $('#email').val();
     var password = $('#password').val();
-    var gender = $('#op1').val();
-    var gender = $('#op2').val();
+    
+    var gender = $('input:radio[name=gender]').val();
+    console.log(gender);
     var address = $('#address').val();
-    var remember = $('#remember').val();
-    var id = $('#id').val();
+        var remember =$('#remember').is(':checked');
+/*    var remember = $('#remember').val();*/
+    var id = $('#row_id').data('id');
+    console.log(id);
     db.transaction(function(tx) {
         tx.executeSql(updateStatement, [email, password, gender, address, remember, id], loadAndReset, handleErrors);
         console.debug('executeSql: ' + updateStatement);
@@ -101,22 +105,23 @@ function dropTable() {
 function loadRecord(i) {
     console.debug('called loadRecord()');
     var item = dataset.item(i);
-
-    $('#email').val(item['email']);
+    $('#email').val(item.email);
     $('#password').val(item['password']);
+    var gender = $('input:radio[name=gender]').val();
+   /*
     $('#op1').val(item['gender']);
-    $('#op2').val(item['gender']);
+       $('#op2').val(item['gender']);*/
+   
     $('#address').val(item['address']);
     $('#remember').val(item['remember']);
-    $('#id').val(item['id']);
+    $('#row_id').data('id',item['id']);
 }
 
 function resetForm() {
     $('#email').val('');
     $('#password').val('');
-    $('#op1').val('');
-    $('#op2').val('');
-    $('#address').val('');
+    $('input:radio[name=gender]').val('');
+     $('#address').val('');
     $('#remember').val('');
     $('#id').val('');
 }
@@ -187,7 +192,7 @@ function renderRecords(transaction, results) {
 
         html = html + '  </tbody>';
         html = html + '</table>';
-
+        
         $('#results').append(html);
     }
 }

@@ -19,7 +19,7 @@
             <div class="control-group">
                 <label class="control-label" for="email">Email</label>
                 <div class="controls">
-                    <input type="text" id="email" placeholder="Email">
+                    <input type="text" name ="email" id="email" placeholder="Email">
                 </div>
             </div>
             <div class="control-group">
@@ -39,16 +39,17 @@
                         Female </label>
                 </div>
             </div>
+
             <div class ="control-group">
                 <label class="control-label " for= "address">address</label>
                 <div class="controls">
-                    <textarea name ="address" id ="address" rows = "3" cols="4" placeholder ="address"value ="address">address</textarea>                                                                                
+                    <textarea name ="address" id ="address" rows = "3" cols="4" placeholder ="address" >address</textarea>
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" id="remember" checked="" value ="rememberme">
+                        <input type="checkbox" id="remember" checked="" name ="remember">
                         Remember me </label>
                 </div>
             </div>
@@ -64,6 +65,7 @@
                     Drop table
                 </button>
             </div>
+            <div class="hidden" id="row_id"></div>
             <!--
             <button id ="submitBut" type ="submit" class ="btn">
             Save and sign up

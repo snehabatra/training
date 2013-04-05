@@ -1,0 +1,279 @@
+<!DOCTYPE  HTML>
+<html>
+    <head>
+        <title>test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href= "./bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+
+        <script src="./js/jquery.js"></script>
+        <script src="./bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript"  language="JavaScript">
+            var db;
+            var dataset;
+
+            function initDatabase() {
+                console.debug('called initDatabase()');
+
+                try {
+                    if (!window.openDatabase) {
+                        alert('not supported');
+                    } else {
+                        var shortName = 'MyDatabase';
+                        var version = '1.0';
+                        var displayName = 'My Test Database Example';
+                        var maxSizeInBytes = 65536;
+                        db = openDatabase(shortName, version, displayName, maxSizeInBytes);
+
+                        createTableIfNotExists();
+                    }
+                } catch(e) {
+                    if (e == 2) {
+                        alert('Invalid database version');
+                    } else {
+                        alert('Unknown error ' + e);
+                    }
+                    return;
+                }
+            }
+
+            function createTableIfNotExists() {
+                console.debug('called createTableIfNotExists()');
+
+                var sql = "CREATE TABLE IF NOT EXISTS Contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, email, password TEXT, gender TEXT, address TEXT, remember TEXT)";
+
+                db.transaction(function(transaction) {
+                    transaction.executeSql(sql, [], showRecords, handleErrors);
+                    console.debug('executeSql: ' + sql);
+                });
+            }
+
+            function insertRecord() {
+                console.debug('called insertRecord()');
+                var email = $('#email').val();
+                var password = $('#password').val();
+                var gender = $('#op1').val();
+                var gender = $('#op2').val();
+                var address = $('#address').val();
+                var remember = $('#remember').val();
+                var sql = 'INSERT INTO Contacts (email, password, gender,address,remember) VALUES (?, ? ,? ,? ,?)';
+
+                db.transaction(function(transaction) {
+                    transaction.executeSql(sql, [email, password, gender, address, remember], showRecordsAndResetForm, handleErrors);
+                    //transaction.executeSql(sql, [name, phone], showRecords, handleErrors);
+                    console.debug('executeSql: ' + sql);
+                });
+            }
+
+            function deleteRecord(id) {
+                console.debug('called deleteRecord()');
+
+                var sql = 'DELETE FROM Contacts WHERE id=?';
+
+                db.transaction(function(transaction) {
+                    transaction.executeSql(sql, [id], showRecords, handleErrors);
+                    console.debug('executeSql: ' + sql);
+                    alert('Delete Sucessfully');
+                });
+
+                resetForm();
+            }
+
+            function updateRecord() {
+                console.debug('called updateRecord()');
+                var email = $('#email').val();
+                var password = $('#password').val();
+                var gender = $('#op1').val();
+                var gender = $('#op2').val();
+                var address = $('#address').val();
+                var remember = $('#remember').val();
+                var id = $("#id").val();
+
+                var sql = 'UPDATE Contacts SET email=?, password=?, gender =?,address =? ,remember =? WHERE id=?';
+
+                db.transaction(function(transaction) {
+                    transaction.executeSql(sql, [email, password, gender, address, remember, id], showRecordsAndResetForm, handleErrors);
+                    console.debug('executeSql: ' + sql);
+                });
+            }
+
+            function dropTable() {
+                console.debug('called dropTable()');
+
+                var sql = 'DROP TABLE Contacts';
+
+                db.transaction(function(transaction) {
+                    transaction.executeSql(sql, [], showRecords, handleErrors);
+                });
+
+                resetForm();
+
+                initDatabase();
+            }
+
+            function loadRecord(i) {
+                console.debug('called loadRecord()');
+
+                var item = dataset.item(i);
+
+                $('#email').val(item['email']);
+                $('#password').val(item['password']);
+                $('#op1').val(item['gender']);
+                $('#op2').val(item['gender']);
+                $('#address').val(item['address']);
+                $('#remember').val(item['remember']);
+                $('#id').val(item['id']);
+            }
+
+            function resetForm() {
+                console.debug('called resetForm()');
+
+                $('#email').val('');
+                $('#password').val('');
+                $('#op1').val('');
+                $('#op2').val('');
+                $('#address').val('');
+                $('#remember').val('');
+                $('#id').val('');
+            }
+
+            function showRecordsAndResetForm() {
+                console.debug('called showRecordsAndResetForm()');
+
+                resetForm();
+                showRecords()
+            }
+
+            function handleErrors(transaction, error) {
+                console.debug('called handleErrors()');
+                console.error('error ' + error.message);
+
+                alert(error.message);
+                return true;
+            }
+
+            function showRecords() {
+                console.debug('called showRecords()');
+
+                var sql = "SELECT * FROM Contacts";
+
+                db.transaction(function(transaction) {
+                    transaction.executeSql(sql, [], renderRecords, handleErrors);
+                });
+            }
+
+            function renderRecords(transaction, results) {
+                console.debug('called renderRecords()');
+
+                html = '';
+                $('#results').html('');
+
+                dataset = results.rows;
+
+                if (dataset.length > 0) {
+                    html = html + '<br/><br/>';
+
+                    html = html + '<table class="table table-bordered">';
+                    html = html + '  <caption>Records added</caption>';
+                    html = html + '  <thead>';
+                    html = html + '    <tr>';
+                    html = html + '      <th class="span1">Id</td>';
+                    html = html + '      <th>email</td>';
+                    html = html + '      <th>password</td>';
+                    html = html + '      <th>gender</td>';
+                    html = html + '      <th>address</td>';
+                    html = html + '      <th>remember</td>';
+                    html = html + '      <th class="span1">Actions</td>';
+                    html = html + '    </tr>';
+                    html = html + '  </thead>';
+
+                    html = html + '  <tbody>';
+
+                    for (var i = 0, item = null; i < dataset.length; i++) {
+                        item = dataset.item(i);
+
+                        html = html + '    <tr>';
+                        html = html + '      <td>' + item['id'] + '</td>';
+                        html = html + '      <td>' + item['email'] + '</td>';
+                        html = html + '      <td>' + item['password'] + '</td>';
+                        html = html + '      <td>' + item['gender'] + '</td>';
+                        html = html + '      <td>' + item['address'] + '</td>';
+                        html = html + '      <td>' + item['remember'] + '</td>';
+                        html = html + '      <td>';
+                        html = html + '        <button type="button" class="btn btn-primary btn-mini" onClick="loadRecord(' + i + ');">edit</button>';
+                        html = html + '        <button type"button" class="btn btn-danger btn-mini" onClick="deleteRecord(' + item['id'] + ');">delete</button>';
+                        html = html + '      </td>';
+                        html = html + '    </tr>';
+                    }
+
+                    html = html + '  </tbody>';
+                    html = html + '</table>';
+
+                    $('#results').append(html);
+                }
+            }
+
+
+            $(document).ready(function() {
+
+                initDatabase();
+            });
+
+        </script>
+        <body>
+            <form>
+                <div class="row">
+                    <div class="span3">
+                        <label for="email">email</label>
+                        <input type="text" class="span3" id="email">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="span3">
+                        <label for="Password">Password</label>
+                        <input type="text" class="span3" id="password">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span3">
+                        <label for="gender">gender</label>
+                        <INPUT type="radio" name="gender" value="Male">
+                        Male
+                        <BR>
+                        <INPUT type="radio" name="gender" value="Female">
+                        Female
+                        <BR>    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span3">
+                        <label for="address">address</label>
+                        <input type="textarea" class="span3" id="address">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span3">
+                        <label class="checkbox">
+                            <input type="checkbox" id="remember" checked="" value ="rememberme">
+                            Remember me </label>
+                    </div>
+                </div>
+                <input type="hidden" id="id"/>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" onClick="insertRecord()">
+                        Create Record
+                    </button>
+                    <button type="button" class="btn" onClick="updateRecord()">
+                        Update Record
+                    </button>
+                    <button type="button" class="btn btn-danger" onClick="dropTable()">
+                        Drop table
+                    </button>
+                </div>
+            </form>
+            <div id="results"></div>
+        </body>
+</html>
+
