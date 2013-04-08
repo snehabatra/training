@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href= "./bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+
+        <script src="./js/jquery.js"></script>
+        <script src="./bootstrap/js/bootstrap.min.js"></script>
+    </head>
+<body>
+<script>
+//class
+function Person(name, gender){
+
+   // object properties 
+   this.name = name;
+   this.gender = gender;
+}
+
+Person.prototype.speak = function(){
+    alert("Howdy, my name is  " + this.name  +"   I am  "   +this.gender);
+}
+
+
+var person = new Person("sneha", "female");
+
+
+person.speak(); 
+</script>
+</body>
+</html>

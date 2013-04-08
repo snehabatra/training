@@ -9,7 +9,6 @@
         <script src="./js/jquery.js"></script>
         <script src="./bootstrap/js/bootstrap.min.js"></script>
         <title>Web SQL Database Example</title>
-        <script src= "/js/app3.js"></script>
     </head>
     <body>
         <legend>
@@ -55,31 +54,20 @@
             </div>
 
             <div class="form-actions">
-                <button type="button" class="btn btn-primary" onClick="insertRecord()">
+                <button type="button" class="btn btn-primary" onClick="App.insertRecord()">
                     Create Record
                 </button>
-                <button type="button" class="btn btn-info" onClick="updateRecord()">
+                <button type="button" class="btn btn-info" onClick="App.updateRecord()">
                     Update Record
                 </button>
-                <button type="button" class="btn btn-warning" onClick="dropTable()">
+                <button type="button" class="btn btn-warning" onClick="App.dropTable()">
                     Drop table
                 </button>
             </div>
             <div class="hidden" id="row_id"></div>
-            <!--
-            <button id ="submitBut" type ="submit" class ="btn">
-            Save and sign up
-            </button>
-            <button id ="btnRe" type ="submit" class ="btn">
-            Reset
-            </button>
-            <button id ="btnUp" type ="submit" class ="btn">
-            Update
-            </button>
-            <button id ="btnDr" type ="submit" class ="btn">
-            Drop
-            </button>-->
+
         </form>
         <div id="results"></div>
+        <script src= "./js/crud.js"></script>
     </body>
 </html>

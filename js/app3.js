@@ -223,3 +223,45 @@ $(document).ready(function() {
      $("#btnDr").click(dropTable);*/
 
 });
+
+var app = {
+    dataset : 0,
+    createStatement : 'CREATE TABLE IF NOT EXISTS sneha(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT, gender TEXT, address TEXT, remember TEXT )',
+    insertStatement : 'INSERT INTO sneha(email, password,gender,address,remember) VALUES (?,?,?,?,?)',
+    updateStatement : 'UPDATE sneha SET email = ?, password = ?,gender=?, address = ?, remember = ? WHERE id=?',
+    deleteStatement : 'DELETE FROM sneha WHERE id=?',
+    dropStatement : 'DROP TABLE sneha',
+    selectAllStatement : 'SELECT * FROM sneha',
+    db : {},
+    shortName : 'MyDatabase',
+    version : '1.0',
+    displayName : 'My Test Database Example',
+    maxSizeInBytes : 65536,
+    'init' : function() {
+        app.createTable();
+        app.db = openDatabase(shortName, version, displayName, maxSizeInBytes);
+    },
+    'createTable' : function() {
+        console.debug('called createTable()');
+        db.transaction(function(tx) {
+            tx.executeSql(createStatement, [], app.showRecords, app.handleErrors);
+            console.debug('executeSql: ' + createStatement);
+        });
+    },
+    'insertRecord' : function() {
+        
+    },
+    'loadRecord' : function() {
+        
+    },
+    'deleteRecord' : function() {
+        
+    },
+    'dropTable' : function() {
+        
+    },
+    'resetForm' : function() {
+        
+    },
+    
+};
