@@ -52,6 +52,14 @@
                         <input type="checkbox" id="remember" checked="" name ="remember">
                         Remember me </label>
                 </div>
+                
+            </div>
+             <div class="control-group">
+                <label class="control-label" for="image">Please upload the image you wish to use</label>
+                <div class="controls">
+                    <input type="file" name ="image" id="photoin"  accept="image/*;capture=camera">
+                    <a href="#delete_1" data-role="button" onClick="save()">Submit</a>
+                </div>
             </div>
 
             <div class="form-actions">
@@ -66,20 +74,13 @@
                 </button>
             </div>
             <div class="hidden" id="row_id"></div>
-            <!--
-            <button id ="submitBut" type ="submit" class ="btn">
-            Save and sign up
-            </button>
-            <button id ="btnRe" type ="submit" class ="btn">
-            Reset
-            </button>
-            <button id ="btnUp" type ="submit" class ="btn">
-            Update
-            </button>
-            <button id ="btnDr" type ="submit" class ="btn">
-            Drop
-            </button>-->
+            
+            <label for="search"> <strong>Enter keyword to search </strong> </label>
+            <input type="search" id="search" />
+            <i class = "icon-search icon-blue"></i>
+
         </form>
         <div id="results"></div>
+
     </body>
 </html>
